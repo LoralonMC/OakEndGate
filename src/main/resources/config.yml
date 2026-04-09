@@ -1,0 +1,60 @@
+# ============================================================
+# OakEndGate
+# Locks End portals until a configured date and time.
+# ============================================================
+
+# ============================================================
+# UNLOCK SCHEDULE
+# ============================================================
+# The End will unlock at this date and time.
+unlock:
+  date: "2026-06-01"
+  time: "18:00:00"
+  timezone: "UTC"
+
+# ============================================================
+# HOLOGRAM SETTINGS
+# ============================================================
+# Requires FancyHolograms plugin (optional).
+# Holograms are displayed at detected End portal locations
+# showing a countdown until the End opens.
+hologram:
+  enabled: true
+  # How often to refresh the countdown text (in seconds)
+  update-interval: 30
+  # Vertical offset above the portal center
+  y-offset: 2.0
+  # Billboard mode: CENTER, FIXED, HORIZONTAL, VERTICAL
+  billboard: CENTER
+  # Lines displayed while the End is locked
+  # Placeholders: <days>, <hours>, <minutes>, <seconds>, <countdown>
+  locked-lines:
+    - "<#C27B6B><bold>The End is Locked"
+    - ""
+    - "<#f2ebd7>Opens in <#FCD472><countdown>"
+  # Lines displayed briefly when the End unlocks
+  unlocked-lines:
+    - "<#8FAA87><bold>The End is Open!"
+  # How long to show the unlocked message before removing (seconds)
+  unlocked-display-time: 10
+
+# ============================================================
+# ANNOUNCEMENTS
+# ============================================================
+announce:
+  # Broadcast to all online players when the End unlocks
+  on-unlock: true
+
+# ============================================================
+# ADVANCED
+# ============================================================
+# Set to true when the End has been manually unlocked via command.
+# Do not edit manually unless you know what you're doing.
+manually-unlocked: false
+
+# ============================================================
+# PORTAL LOCATIONS
+# ============================================================
+# Detected portal locations (managed automatically).
+# You can also add locations manually in "world:x:y:z" format.
+portals: []

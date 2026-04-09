@@ -1,0 +1,42 @@
+name: OakEndGate
+version: '${version}'
+main: dev.oakheart.oakendgate.OakEndGate
+description: 'Locks End portals until a configured date and time.'
+api-version: '1.21.10'
+authors:
+  - Loralon
+website: https://github.com/LoralonMC/OakEndGate
+dependencies:
+  server:
+    FancyHolograms:
+      load: BEFORE
+      required: false
+permissions:
+  oakendgate.*:
+    description: 'All OakEndGate permissions'
+    default: op
+    children:
+      oakendgate.status: true
+      oakendgate.reload: true
+      oakendgate.unlock: true
+      oakendgate.lock: true
+      oakendgate.portals: true
+      oakendgate.bypass: true
+  oakendgate.status:
+    description: 'View End gate status and countdown'
+    default: true
+  oakendgate.reload:
+    description: 'Reload configuration'
+    default: op
+  oakendgate.unlock:
+    description: 'Manually unlock the End early'
+    default: op
+  oakendgate.lock:
+    description: 'Re-lock the End after manual unlock'
+    default: op
+  oakendgate.portals:
+    description: 'Manage registered portal locations'
+    default: op
+  oakendgate.bypass:
+    description: 'Bypass End portal lock'
+    default: op

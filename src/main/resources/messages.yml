@@ -1,0 +1,43 @@
+# ============================================================
+# OakEndGate Messages
+# ============================================================
+# MiniMessage format: https://docs.advntr.dev/minimessage/format.html
+# Placeholders: <countdown> - Formatted countdown, <date> - Unlock date,
+#   <time> - Unlock time, <timezone> - Timezone, <portal_count> - Portal count,
+#   <index> - Portal index, <location> - Portal location, <error> - Error details
+# Set text to "" to disable individual messages
+# Display modes: chat, action_bar
+
+# ============================================================
+# GAMEPLAY MESSAGES
+# ============================================================
+portal-blocked:
+  text: "<#D89B6A>The End is locked! Opens in <#FCD472><countdown><#D89B6A>."
+  display: action_bar
+end-unlocked:
+  text: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#8FAA87>The End has been unlocked! End portals are now active."
+  display: chat
+
+# ============================================================
+# COMMAND MESSAGES
+# ============================================================
+commands:
+  status-locked: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#f2ebd7>The End is <#C27B6B>locked<#f2ebd7>. Opens in <#FCD472><countdown><#f2ebd7>."
+  status-locked-date: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#f2ebd7>Unlock date: <#FCD472><date> <time> <timezone>"
+  status-unlocked: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#f2ebd7>The End is <#8FAA87>open<#f2ebd7>!"
+  status-portals: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#f2ebd7>Tracked portals: <#FCD472><portal_count>"
+  unlock-success: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#8FAA87>The End has been manually unlocked."
+  unlock-already: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#D89B6A>The End is already unlocked."
+  lock-success: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#8FAA87>The End has been re-locked."
+  lock-already: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#D89B6A>The End is already locked."
+  lock-past-date: "<#6C757D>[<#C27B6B>ᴇʀʀᴏʀ<#6C757D>] <#C27B6B>Cannot re-lock: the unlock date has already passed. Update the date in config first."
+  portals-header: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#FCD472>Registered Portals:"
+  portals-entry: "<#6C757D>  <#FCD472><index><#6C757D>. <#f2ebd7><location>"
+  portals-empty: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#f2ebd7>No portals registered."
+  portal-added: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#8FAA87>Portal registered at <#FCD472><location><#8FAA87>."
+  portal-already-registered: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#D89B6A>This portal is already registered."
+  portal-not-found: "<#6C757D>[<#C27B6B>ᴇʀʀᴏʀ<#6C757D>] <#C27B6B>No End portal found nearby."
+  portal-removed: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#8FAA87>Portal <#FCD472><index><#8FAA87> removed."
+  portal-invalid-index: "<#6C757D>[<#C27B6B>ᴇʀʀᴏʀ<#6C757D>] <#C27B6B>Invalid portal index. Use <#FCD472>/oakendgate portals<#C27B6B> to see the list."
+  reload-success: "<#6C757D>[<#6B7A5E>ᴏᴀᴋʜᴇᴀʀᴛ<#6C757D>] <#8FAA87>Configuration reloaded."
+  reload-error: "<#6C757D>[<#C27B6B>ᴇʀʀᴏʀ<#6C757D>] <#C27B6B>Error reloading configuration: <#FCD472><error><#C27B6B>."
