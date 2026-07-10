@@ -77,4 +77,37 @@ public class PortalListener implements Listener {
         messageManager.send(player, "portal-blocked",
                 Placeholder.unparsed("countdown", portalManager.getFormattedCountdown()));
     }
+
+    /**
+     * Backstop for every way into the End that is not a walked-through portal:
+     * PlayerPortalEvent only covers cause END_PORTAL, but a thrown ender pearl
+     * through a lit portal arrives as an ENDER_PEARL teleport, vehicles carry
+     * passengers via entity portal handling, and third-party plugins teleport
+     * with UNKNOWN/PLUGIN causes. A portal can be lit while locked (a bypass
+     * holder placing the 12th eye lights it for everyone), so the world-level
+     * gate is what actually enforces the lock.
+     */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        if (event.getCause() == PlayerTeleportEvent.TeleportCause.END_PORTAL) return; // handled above
+
+        World to = event.getTo().getWorld();
+        if (to == null || to.getEnvironment() != World.Environment.THE_END) return;
+        // Scope to the MAIN end only. Other THE_END-environment worlds (the
+        // rw_end resource world) are entered by plugin teleports on purpose and
+        // have their own access rules — gating by environment alone would block
+        // /rw for every non-bypass player.
+        String mainEndName = org.bukkit.Bukkit.getWorlds().get(0).getName() + "_the_end";
+        if (!to.getName().equals(mainEndName)) return;
+        if (event.getPlayer().getWorld().getEnvironment() == World.Environment.THE_END) return;
+
+        if (!portalManager.isLocked()) return;
+
+        Player player = event.getPlayer();
+        if (player.hasPermission("oakendgate.bypass")) return;
+
+        event.setCancelled(true);
+        messageManager.send(player, "portal-blocked",
+                Placeholder.unparsed("countdown", portalManager.getFormattedCountdown()));
+    }
 }

@@ -77,7 +77,11 @@ public class OakEndGate extends JavaPlugin {
         if (portalManager.isLocked()) {
             portalManager.startCountdownTask();
         } else {
-            getLogger().info("The End is already unlocked.");
+            // Loud, not info: a configured date in the past usually means the
+            // config was wiped/regenerated (e.g. a data reset) — the gate is
+            // silently open, which on this server is a months-early End unlock.
+            getLogger().warning("The End is already unlocked (configured unlock date is in the past)."
+                    + " If this is unintended, fix unlock.date in config.yml and restart.");
         }
     }
 

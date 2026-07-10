@@ -112,8 +112,10 @@ public class EndGateCommand {
                         Placeholder.unparsed("error", "Configuration validation failed"));
             }
         } catch (Exception e) {
+            // getMessage() can be null (NPE and friends); Placeholder.unparsed
+            // rejects null and would replace this message with a Brigadier error.
             messageManager.sendCommand(sender, "reload-error",
-                    Placeholder.unparsed("error", e.getMessage()));
+                    Placeholder.unparsed("error", String.valueOf(e.getMessage())));
         }
         return Command.SINGLE_SUCCESS;
     }
