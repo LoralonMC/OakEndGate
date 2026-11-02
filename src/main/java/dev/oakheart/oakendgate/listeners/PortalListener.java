@@ -89,16 +89,13 @@ public class PortalListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (event.getCause() == PlayerTeleportEvent.TeleportCause.END_PORTAL) return; // handled above
-
+        // END_PORTAL is gated here too. PlayerPortalEvent has its own handler list, so a walked-in
+        // portal never reaches this method twice; but a player riding a vehicle through the portal
+        // gets no PlayerPortalEvent at all, only this teleport with cause END_PORTAL (Paper's
+        // Entity.teleportCrossDimension teleports each passenger with the vehicle's transition).
+        // Skipping that cause let riders into a locked End (Plugin Review 2026-11-01).
         World to = event.getTo().getWorld();
-        if (to == null || to.getEnvironment() != World.Environment.THE_END) return;
-        // Scope to the MAIN end only. Other THE_END-environment worlds (the
-        // rw_end resource world) are entered by plugin teleports on purpose and
-        // have their own access rules — gating by environment alone would block
-        // /rw for every non-bypass player.
-        String mainEndName = org.bukkit.Bukkit.getWorlds().get(0).getName() + "_the_end";
-        if (!to.getName().equals(mainEndName)) return;
+        if (!isMainEnd(to)) return;
         if (event.getPlayer().getWorld().getEnvironment() == World.Environment.THE_END) return;
 
         if (!portalManager.isLocked()) return;
@@ -109,5 +106,48 @@ public class PortalListener implements Listener {
         event.setCancelled(true);
         messageManager.send(player, "portal-blocked",
                 Placeholder.unparsed("countdown", portalManager.getFormattedCountdown()));
+    }
+
+    /**
+     * Stops a vehicle at a locked portal when it carries a player who may not enter, so the vehicle
+     * does not cross without them (the passenger teleport above would refuse the rider, and their
+     * horse or boat would end up in the End alone).
+     */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onEntityPortal(org.bukkit.event.entity.EntityPortalEvent event) {
+        if (!portalManager.isLocked()) return;
+        org.bukkit.entity.Entity vehicle = event.getEntity();
+        if (vehicle.getWorld().getEnvironment() == World.Environment.THE_END) return;
+        org.bukkit.Location to = event.getTo();
+        boolean intoMainEnd = to != null ? isMainEnd(to.getWorld())
+                : event.getPortalType() == org.bukkit.PortalType.ENDER
+                        && vehicle.getWorld().equals(org.bukkit.Bukkit.getWorlds().get(0));
+        if (!intoMainEnd) return;
+        Player blocked = firstBlockedRider(vehicle);
+        if (blocked == null) return;
+        event.setCancelled(true);
+        messageManager.send(blocked, "portal-blocked",
+                Placeholder.unparsed("countdown", portalManager.getFormattedCountdown()));
+    }
+
+    private static Player firstBlockedRider(org.bukkit.entity.Entity vehicle) {
+        for (org.bukkit.entity.Entity passenger : vehicle.getPassengers()) {
+            if (passenger instanceof Player player && !player.hasPermission("oakendgate.bypass")) {
+                return player;
+            }
+            Player nested = firstBlockedRider(passenger);
+            if (nested != null) return nested;
+        }
+        return null;
+    }
+
+    /**
+     * The main End only. Other THE_END-environment worlds (the rw_end resource world) are entered by
+     * plugin teleports on purpose and have their own access rules; gating by environment alone
+     * would block /rw for every non-bypass player.
+     */
+    private static boolean isMainEnd(World world) {
+        if (world == null || world.getEnvironment() != World.Environment.THE_END) return false;
+        return world.getName().equals(org.bukkit.Bukkit.getWorlds().get(0).getName() + "_the_end");
     }
 }

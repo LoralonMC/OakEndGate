@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-11-02
+
+### Fixed
+- A player riding a boat, minecart or mount through a lit portal entered a locked End. The vehicle's passengers are teleported with cause END_PORTAL and no PlayerPortalEvent of their own, and the teleport backstop skipped that cause. The backstop now gates it, and a vehicle carrying a player who may not enter is stopped at the portal, so it doesn't cross without them (Plugin Review 2026-11-01, July carry-over; verified in Paper's Entity.teleportCrossDimension).
+
 ## [1.1.0] - 2026-10-20
 
 ### Changed
